@@ -1,7 +1,7 @@
 return {
   "hrsh7th/cmp-nvim-lsp",
   config = function()
-    vim.lsp.set_log_level("error")
+    vim.lsp.log.set_level("error")
 
     -- Custom hover with border
     vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
@@ -39,37 +39,45 @@ return {
     vim.lsp.config("clangd", {
       capabilities = capabilities,
       on_attach = lsp_keymaps,
-      cmd = { "clangd", "--compile-commands-dir=build" },
-      root_markers = { "compile_commands.json", ".git" },
+      cmd = { 
+        "clangd", 
+        "--background-index",
+        "--clang-tidy",
+        "--fallback-style=WebKit" 
+      },
+      -- Removed hard requirement for 'build' folder to make it more flexible
+      --cmd = { "clangd", "--compile-commands-dir=build" },
+      root_markers = { "compile_commands.json", ".git", "Makefile", "main.c", "minilibx-linux" },
     })
-
-    vim.lsp.config("gopls", {
-      capabilities = capabilities,
-      on_attach = lsp_keymaps,
-    })
-
-    vim.lsp.config("pyright", {
-      capabilities = capabilities,
-      on_attach = lsp_keymaps,
-    })
-
-    vim.lsp.config("ts_ls", {
-      capabilities = capabilities,
-      on_attach = lsp_keymaps,
-      cmd = { "typescript-language-server", "--stdio" },
-    })
-
-    vim.lsp.config("jdtls", {
-      capabilities = capabilities,
-      on_attach = lsp_keymaps,
-    })
-
-    vim.lsp.enable({
-      "clangd",
-      "gopls",
-      "pyright",
-      "ts_ls",
-      "jdtls",
-    })
+    vim.lsp.enable("clangd")
+--
+--    vim.lsp.config("gopls", {
+--      capabilities = capabilities,
+--      on_attach = lsp_keymaps,
+--    })
+--
+--    vim.lsp.config("pyright", {
+--      capabilities = capabilities,
+--      on_attach = lsp_keymaps,
+--    })
+--
+--    vim.lsp.config("ts_ls", {
+--      capabilities = capabilities,
+--      on_attach = lsp_keymaps,
+--      cmd = { "typescript-language-server", "--stdio" },
+--    })
+--
+--    vim.lsp.config("jdtls", {
+--      capabilities = capabilities,
+--      on_attach = lsp_keymaps,
+--    })
+--
+--    vim.lsp.enable({
+--      "clangd",
+--      "gopls",
+--      "pyright",
+--      "ts_ls",
+--      "jdtls",
+--    })
   end,
 }
